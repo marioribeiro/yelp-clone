@@ -71,4 +71,15 @@ feature 'restaurants' do
     end
   end
 
+  context 'an invalid restaurant' do
+    scenario 'does not let the user submit a short name' do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'Fr'
+      click_button 'Create restaurant'
+      expect(page).not_to have_css 'h2', text: 'kf'
+      expect(page).to have_content 'error'
+    end
+  end
+
 end
