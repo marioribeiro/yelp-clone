@@ -54,7 +54,7 @@ feature 'restaurants' do
       fill_in 'Description', with: 'The best hotdogs in Portugal'
       click_button 'Update Restaurant'
       click_link 'Frankie Lx'
-      expect(page).to have_content('Frankie LX')
+      expect(page).to have_content('Frankie Lx')
       expect(page).to have_content('The best hotdogs in Portugal')
       expect(current_path).to eq '/restaurants/1'
     end
