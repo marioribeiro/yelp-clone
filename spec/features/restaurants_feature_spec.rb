@@ -32,7 +32,7 @@ feature 'restaurants' do
     end
   end
 
-  context 'viewing restaurantas' do
+  context 'viewing restaurants' do
 
     let!(:frankie){ Restaurant.create(name:'Frankie') }
 
@@ -41,6 +41,22 @@ feature 'restaurants' do
       click_link 'Frankie'
       expect(page).to have_content('Frankie')
       expect(current_path).to eq "/restaurants/#{frankie.id}"
+    end
+  end
+
+  context 'editing restaurants' do
+    before { Restaurant.create name: 'Frankie', description: 'The best hotdogs in Lisbon', id: 1 }
+
+    scenario 'let a user edit a restaurant' do
+      visit '/restaurants'
+      click_link 'Edit Frankie'
+      fill_in 'Name', with: 'Frankie Lx'
+      fill_in 'Description', with: 'The best hotdogs in Portugal'
+      click_button 'Update Restaurant'
+      click_link 'Frankie Lx'
+      expect(page).to have_content('Frankie LX')
+      expect(page).to have_content('The best hotdogs in Portugal')
+      expect(current_path).to eq '/restaurants/1'
     end
   end
 
