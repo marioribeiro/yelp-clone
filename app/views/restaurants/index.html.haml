@@ -4,6 +4,8 @@
     - if restaurant.reviews.any?
       - restaurant.reviews.each do |review|
         %p #{review.thoughts} #{review.rating}/5
+        - if review.user == current_user
+          = button_to "Delete", restaurant_review_path(restaurant, review), method: :delete
       %h3 Average Rating: #{restaurant.average_rating.to_i}
     = link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant)
     = link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete
