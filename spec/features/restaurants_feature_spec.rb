@@ -11,7 +11,8 @@ feature 'restaurants' do
   
   context 'restaurants have been added' do
     before do
-      Restaurant.create(name: 'Frankie')
+      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      @user.restaurants.create_with_user({ name: 'Frankie' }, @user)
     end
 
     scenario 'display restaurants' do
@@ -22,6 +23,16 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
+
+    before do
+      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      visit '/restaurants'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'test@user.com'
+      fill_in 'Password', with: 'abc12345'
+      click_button 'Log in'
+    end
+
     scenario 'prompts user to fill out a form, then display the new restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
@@ -34,7 +45,11 @@ feature 'restaurants' do
 
   context 'viewing restaurants' do
 
-    let!(:frankie){ Restaurant.create(name:'Frankie') }
+    before do
+      @user = User.create(email: 'test@user.com', password: 'abc12345') 
+    end
+
+    let!(:frankie){ @user.restaurants.create_with_user({ name: 'Frankie' }, @user) }
 
     scenario 'allows a user to view a restaurant' do
       visit '/restaurants'
@@ -45,7 +60,16 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    before { Restaurant.create name: 'Frankie', description: 'The best hotdogs in Lisbon', id: 1 }
+
+    before do
+      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      visit '/restaurants'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'test@user.com'
+      fill_in 'Password', with: 'abc12345'
+      click_button 'Log in'
+      @user.restaurants.create_with_user({ name: 'Frankie', description: 'The best hotdogs in Lisbon', id: 1 }, @user)
+    end
 
     scenario 'let a user edit a restaurant' do
       visit '/restaurants'
@@ -61,7 +85,15 @@ feature 'restaurants' do
   end
 
   context 'deleting restaurants' do
-    before { Restaurant.create name: 'KFC', description: 'The best hotwings', id: 2 }
+    before do
+      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      visit '/restaurants'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'test@user.com'
+      fill_in 'Password', with: 'abc12345'
+      click_button 'Log in'
+      @user.restaurants.create_with_user({ name: 'KFC', description: 'The best hotwings', id: 2 }, @user)
+    end
 
     scenario 'let a user delete a restaurant' do
       visit '/restaurants'
@@ -72,6 +104,15 @@ feature 'restaurants' do
   end
 
   context 'an invalid restaurant' do
+    before do
+      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      visit '/restaurants'
+      click_link 'Sign in'
+      fill_in 'Email', with: 'test@user.com'
+      fill_in 'Password', with: 'abc12345'
+      click_button 'Log in'
+    end
+
     scenario 'does not let the user submit a short name' do
       visit '/restaurants'
       click_link 'Add a restaurant'
