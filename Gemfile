@@ -44,7 +44,8 @@ group :development, :test do
   gem 'capybara'
   gem 'rspec-collection_matchers'
   # Should context / matchers
-  gem 'shoulda'
+  gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
+  gem 'shoulda-context'
 end
 
 group :development do
