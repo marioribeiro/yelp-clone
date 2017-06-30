@@ -22,6 +22,12 @@ feature 'reviewing' do
     expect(page).to have_content('Average Rating: 5')
   end
 
+  scenario 'deletes reviews' do
+    leave_review('Not good', '4')
+    click_button 'Delete Review'
+    expect(page).to_not have_content('Not good')
+  end
+
   # Helpers
 
   def create_user
