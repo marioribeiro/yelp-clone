@@ -11,7 +11,8 @@ feature 'restaurants' do
   
   context 'restaurants have been added' do
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345')
+      create_user
+      log_in
       @user.restaurants.create_with_user({ name: 'Frankie' }, @user)
     end
 
@@ -25,12 +26,8 @@ feature 'restaurants' do
   context 'creating restaurants' do
 
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345')
-      visit '/restaurants'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'test@user.com'
-      fill_in 'Password', with: 'abc12345'
-      click_button 'Log in'
+      create_user
+      log_in
     end
 
     scenario 'prompts user to fill out a form, then display the new restaurant' do
@@ -46,7 +43,7 @@ feature 'restaurants' do
   context 'viewing restaurants' do
 
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345') 
+      create_user
     end
 
     let!(:frankie){ @user.restaurants.create_with_user({ name: 'Frankie' }, @user) }
@@ -62,12 +59,8 @@ feature 'restaurants' do
   context 'editing restaurants' do
 
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345')
-      visit '/restaurants'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'test@user.com'
-      fill_in 'Password', with: 'abc12345'
-      click_button 'Log in'
+      create_user
+      log_in
       @user.restaurants.create_with_user({ name: 'Frankie', description: 'The best hotdogs in Lisbon', id: 1 }, @user)
     end
 
@@ -86,12 +79,8 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345')
-      visit '/restaurants'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'test@user.com'
-      fill_in 'Password', with: 'abc12345'
-      click_button 'Log in'
+      create_user
+      log_in
       @user.restaurants.create_with_user({ name: 'KFC', description: 'The best hotwings', id: 2 }, @user)
     end
 
@@ -105,12 +94,8 @@ feature 'restaurants' do
 
   context 'an invalid restaurant' do
     before do
-      @user = User.create(email: 'test@user.com', password: 'abc12345')
-      visit '/restaurants'
-      click_link 'Sign in'
-      fill_in 'Email', with: 'test@user.com'
-      fill_in 'Password', with: 'abc12345'
-      click_button 'Log in'
+      create_user
+      log_in
     end
 
     scenario 'does not let the user submit a short name' do
@@ -121,6 +106,21 @@ feature 'restaurants' do
       expect(page).not_to have_css 'h2', text: 'kf'
       expect(page).to have_content 'error'
     end
+  end
+
+
+  # Helpers
+
+  def create_user
+    @user = User.create(email: 'test@user.com', password: 'abc12345')
+  end
+
+  def log_in
+    visit '/restaurants'
+    click_link 'Sign in'
+    fill_in 'Email', with: 'test@user.com'
+    fill_in 'Password', with: 'abc12345'
+    click_button 'Log in'
   end
 
 end
