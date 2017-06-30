@@ -38,4 +38,21 @@ RSpec.describe Restaurant, type: :model do
       end
     end
   end
+
+  describe '#average_rating' do
+    context 'no reviews' do
+      it 'returns "N/A" when there are no reviews' do
+        restaurant = @user.restaurants.create_with_user({name: 'The Ivy'}, @user)
+        expect(restaurant.average_rating).to eq 'N/A'
+      end
+    end
+
+    context '1 review' do
+      it 'returns the rating' do
+        restaurant = @user.restaurants.create_with_user({name: 'The Ivy'}, @user)
+        restaurant.reviews.create_with_user({ rating: 4 }, @user)
+        expect(restaurant.average_rating).to eq 4
+      end
+    end
+  end
 end

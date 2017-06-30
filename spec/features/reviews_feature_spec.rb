@@ -17,6 +17,11 @@ feature 'reviewing' do
     expect(page).to have_content('Amazing')
   end
 
+  scenario 'displays an average rating for all reviews' do
+    leave_review('Great', '5')
+    expect(page).to have_content('Average Rating: 5')
+  end
+
   # Helpers
 
   def create_user
@@ -29,6 +34,14 @@ feature 'reviewing' do
     fill_in 'Email', with: 'test@user.com'
     fill_in 'Password', with: 'abc12345'
     click_button 'Log in'
+  end
+
+  def leave_review(thoughts, rating)
+    visit '/restaurants'
+    click_link 'Review Frankie'
+    fill_in 'Thoughts', with: thoughts
+    select rating, from: 'Rating'
+    click_button 'Leave Review'
   end
 
 end
